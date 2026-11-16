@@ -25,7 +25,9 @@ try {
     const timeout = (check.timeoutSeconds || 120) * 1000;
     const root = process.env.CLAUDE_PROJECT_DIR || input.cwd || process.cwd();
     for (const command of commands) {
-      const r = spawnSync(command, { cwd: root, shell: true, encoding: 'utf8', timeout });
+      // Windows에서는 셸의 오류 안내가 깨지지 않도록 출력 글자 집합을 UTF-8로 맞춘다.
+      const line = process.platform === 'win32' ? `chcp 65001>nul & ${command}` : command;
+      const r = spawnSync(line, { cwd: root, shell: true, encoding: 'utf8', timeout });
       if (r.error && r.error.code === 'ETIMEDOUT') continue; // 시간 초과는 실패로 보지 않는다.
       if (r.status !== 0) {
         const output = tail(`${r.stdout || ''}\n${r.stderr || ''}`.trim(), 3000);
