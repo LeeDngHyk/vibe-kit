@@ -1,0 +1,14 @@
+{
+  "name": "vibe-kit",
+  "description": "어떤 프로젝트에서든 바이브 코딩 환경을 만들어 주고 스스로 다듬는 키트",
+  "owner": {
+    "name": "vibe-kit maintainers"
+  },
+  "plugins": [
+    {
+      "name": "vibe-kit",
+      "source": "./plugins/vibe-kit",
+      "description": "프로젝트 환경 만들기(setup)와 세 가지 순환: 일하는 방식 개선(retro), 최신 상태 유지(freshness), 도구 탐색(scout)"
+    }
+  ]
+}

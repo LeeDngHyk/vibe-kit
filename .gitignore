@@ -1,0 +1,12 @@
+# 정기 실행이 프로젝트를 내려받아 두는 작업 폴더
+server/.work/
+
+# 비밀값은 저장소에 넣지 않는다
+.env
+.env.*
+*.pem
+*.key
+
+# 각자의 로컬 설정
+.claude/settings.local.json
+node_modules/

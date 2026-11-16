@@ -1,0 +1,7 @@
+{
+  "name": "vibe-kit",
+  "description": "프로젝트 환경 만들기(setup)와 세 가지 순환: 일하는 방식 개선(retro), 최신 상태 유지(freshness), 도구 탐색(scout)",
+  "author": {
+    "name": "vibe-kit maintainers"
+  }
+}

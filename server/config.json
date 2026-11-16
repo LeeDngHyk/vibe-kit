@@ -1,0 +1,6 @@
+{
+  "maxTurns": 80,
+  "maxBudgetUsd": 5,
+  "timeoutMinutes": 45,
+  "model": ""
+}
