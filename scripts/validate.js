@@ -228,15 +228,33 @@ function runHook(script, input, cwd) {
   const env = { ...process.env };
   delete process.env.CLAUDE_PROJECT_DIR;
   const start = path.join(PLUGIN, 'hooks', 'session-start.js');
-  for (const cwd of [tmp, ROOT]) {
-    const out = runHook(start, { hook_event_name: 'SessionStart', source: 'startup', cwd }, cwd);
+  const startInput = (cwd, source) => ({ hook_event_name: 'SessionStart', source: source || 'startup', cwd });
+  const expectContext = (out, label) => {
     try {
       const parsed = JSON.parse(out);
       if (!parsed.hookSpecificOutput || !parsed.hookSpecificOutput.additionalContext) throw new Error('additionalContext 없음');
     } catch (e) {
-      fail(`session-start.js 출력이 기대한 JSON이 아님: ${e.message}`);
+      fail(`session-start.js(${label}) 출력이 기대한 JSON이 아님: ${e.message}`);
     }
-  }
+  };
+  const expectSilent = (out, label) => {
+    if (out.trim() !== '') fail(`session-start.js(${label})는 아무것도 출력하지 않아야 함`);
+  };
+  // 키트 저장소: 상태를 알려 준다.
+  expectContext(runHook(start, startInput(ROOT), ROOT), '키트 저장소');
+  // 키트 환경이 없는 임시 폴더(.git 없음): 조용하다.
+  expectSilent(runHook(start, startInput(tmp), tmp), '임시 폴더');
+  // 키트 환경이 없는 프로젝트(.git 있음): 한 번만 안내하고, 두 번째와 /clear 뒤에는 조용하다.
+  const proj = path.join(tmp, 'proj');
+  fs.mkdirSync(path.join(proj, '.git'), { recursive: true });
+  process.env.CLAUDE_PLUGIN_DATA = path.join(tmp, 'data');
+  expectSilent(runHook(start, startInput(proj, 'clear'), proj), '프로젝트, /clear 뒤');
+  expectContext(runHook(start, startInput(proj), proj), '프로젝트, 첫 세션');
+  expectSilent(runHook(start, startInput(proj), proj), '프로젝트, 두 번째 세션');
+  // 키트 환경이 있는 프로젝트: 매번 상태를 알려 준다.
+  fs.mkdirSync(path.join(proj, 'docs', 'agent'), { recursive: true });
+  fs.writeFileSync(path.join(proj, 'docs', 'agent', 'STATE.md'), '# 상태\n\n## 다음 할 일\n\n- 예시\n');
+  expectContext(runHook(start, startInput(proj), proj), '환경 있는 프로젝트');
   runHook(start, {}, tmp); // 입력이 비어도 끝나야 한다
   for (const name of ['format-after-edit.js', 'check-before-stop.js']) {
     runHook(path.join(PLUGIN, 'templates', 'hooks', name), { cwd: tmp, tool_input: { file_path: path.join(tmp, 'none.txt') } }, tmp);
