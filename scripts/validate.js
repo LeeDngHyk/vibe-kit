@@ -132,6 +132,20 @@ const user = (() => {
     return '';
   }
 })();
+// 사용자 이름 검사는 개인을 가리키는 이름일 때만 한다. 서버나 클라우드의 흔한 계정 이름
+// (root 등)은 개인 정보가 아니고 보통 낱말과 겹쳐서 검사하지 않는다.
+// 다른 낱말의 일부로 들어간 것은 잡지 않도록 낱말 경계로 찾는다.
+const GENERIC_USERS = new Set([
+  'root', 'admin', 'administrator', 'user', 'users', 'guest', 'default', 'public', 'system',
+  'ubuntu', 'debian', 'centos', 'fedora', 'ec2-user', 'azureuser', 'runner', 'runneradmin',
+  'node', 'claude', 'agent', 'build', 'builder', 'docker', 'vscode', 'codespace', 'gitpod',
+  'circleci', 'jenkins', 'nobody', 'daemon', 'service', 'test', 'tester', 'developer',
+  'vibekit', 'vibe-kit', // server/README.md가 만들라고 안내하는 전용 계정 이름
+]);
+const userPattern =
+  user && user.length >= 4 && !GENERIC_USERS.has(user.toLowerCase())
+    ? new RegExp(`(?<![A-Za-z0-9])${user.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![A-Za-z0-9])`, 'i')
+    : null;
 const PATTERNS = [
   [/(?<![A-Za-z])[A-Za-z]:\\(?:Users|Workspace|Documents and Settings)\\/i, 'Windows 절대 경로'],
   [/\/(?:Users|home)\/(?!you\b|\.\.\.)[A-Za-z0-9._-]+\//, '사용자 폴더 절대 경로'],
@@ -147,7 +161,7 @@ for (const f of files) {
   const text = fs.readFileSync(f, 'utf8');
   text.split(/\r?\n/).forEach((line, i) => {
     for (const [re, label] of PATTERNS) if (re.test(line)) fail(`${label}: ${relPath(f)}:${i + 1}`);
-    if (user && user.length >= 4 && line.toLowerCase().includes(user.toLowerCase())) {
+    if (userPattern && userPattern.test(line)) {
       fail(`이 컴퓨터의 사용자 이름: ${relPath(f)}:${i + 1}`);
     }
   });
