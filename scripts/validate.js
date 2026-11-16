@@ -191,9 +191,9 @@ function adoptedText(rows) {
     '`catalog/TOOLS.md`에서 상태가 "채택"인 줄만 옮긴 것이다. 이 파일은 손으로 고치지 않는다. ' +
     '키트 저장소에서 `node scripts/validate.js --sync`를 실행하면 다시 만들어진다.\n\n' +
     'setup은 이 표에 있는 것 중 프로젝트의 형태와 언어에 해당하는 것만, 역할마다 하나씩 제안한다.\n\n' +
-    '| 이름 | 역할 | 해당하는 프로젝트 | 설치 | 컨텍스트 비용 | 확인 날짜 |\n|---|---|---|---|---|---|\n';
+    '| 이름 | 역할 | 해당하는 프로젝트 | 설치 | 컨텍스트 비용 | 근거와 실행 범위 | 확인 날짜 | 출처 주소 |\n|---|---|---|---|---|---|---|---|\n';
   const adopted = rows.filter((r) => r.cells[2] === '채택');
-  const body = adopted.map((r) => `| ${[r.cells[0], r.cells[1], r.cells[3], r.cells[4], r.cells[5], r.cells[7]].join(' | ')} |\n`).join('');
+  const body = adopted.map((r) => `| ${[r.cells[0], r.cells[1], r.cells[3], r.cells[4], r.cells[5], r.cells[6], r.cells[7], r.cells[8]].join(' | ')} |\n`).join('');
   return head + body + (adopted.length ? '' : '\n(아직 채택한 도구가 없다.)\n');
 }
 if (fs.existsSync(TOOLS)) {
