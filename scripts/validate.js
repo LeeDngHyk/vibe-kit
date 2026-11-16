@@ -208,6 +208,11 @@ if (fs.existsSync(TOOLS)) {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(r.cells[7])) fail(`TOOLS.md: 채택한 도구에 확인 날짜가 없음: ${name}`);
         if (!/^https?:\/\//.test(r.cells[8])) fail(`TOOLS.md: 채택한 도구에 출처 주소가 없음: ${name}`);
         if (r.cells[4] === '-' || r.cells[4] === '') fail(`TOOLS.md: 채택한 도구에 설치 방법이 없음: ${name}`);
+        // 상업적 이용을 허용하는 라이선스가 이유 칸에 적혀 있어야 채택할 수 있다(catalog/POLICY.md의 "라이선스" 절).
+        if (!/(MIT|Apache-2\.0|BSD-[23]-Clause|ISC|MPL-2\.0|CC0-1\.0|CC-BY-4\.0|Unlicense)/.test(r.cells[6])) {
+          fail(`TOOLS.md: 채택한 도구의 이유 칸에 상업적 이용을 허용하는 라이선스 이름이 없음: ${name}`);
+        }
+        if (/CC-BY-NC|비상업|non-?commercial/i.test(r.cells[6])) fail(`TOOLS.md: 비상업 조건의 도구는 채택할 수 없음: ${name}`);
         (roles[r.cells[1]] = roles[r.cells[1]] || []).push(name);
       }
     }
