@@ -29,6 +29,7 @@
 `scout`와 정기 실행의 기록이다. 형식: `- 날짜 | 무엇 | 결과 | 한 일, 만든 변경 제안, 실패 원인`
 
 <!-- 실행 기록: 새 줄을 이 표시 바로 아래에 넣는다 -->
+- 2026-11-16 | scout ECC 나머지 디자인 스킬 시험(손으로 실행) | 성공(한 번 다시 함) | ECC의 화면 관련 스킬 13개의 글을 읽고, 시험할 수 있는 6개를 네 과제(SwiftUI, Compose, React 움직임, React 접근성)로 시험. 첫 실행은 시험 준비 스크립트의 실수로 스킬 폴더가 엉뚱한 곳에 복사돼 스킬 없이 돈 것을 실행 보고에서 발견하고 다시 실행함(대화 없는 실행 14번, 어림 약 2.3달러). 채택 1: motion-foundations + motion-patterns(움직임). 보류 4, 후보 3, 범위 밖 1줄. 기본 가지에 바로 올림. 되돌리기: 이 커밋을 git revert
 - 2026-11-16 | scout ECC 디자인 스킬 시험(손으로 실행) | 성공 | ECC의 낱개 스킬 셋의 글만 받아 격리 폴더에서 시험(대화 없는 실행 3번, 어림 약 0.59달러). 채택 2: ECC design-system(디자인 값·참고 자료), ECC accessibility(접근성). 보류 1: ECC frontend-design-direction. 낱개 스킬을 복사해 들이는 절차를 setup에 더함. 변경 제안: feat/learning-and-search-first
 - 2026-11-16 | scout 디자인 2차 시험(손으로 실행) | 성공 | 새 후보 다섯 개의 스킬 글만 받아(스크립트는 받지도 실행하지도 않음) 격리 폴더에서 시험: 웹 화면 만들기 2(oil-ui, hallmark), 다듬기 1(unslop), React Native 화면 검토 3(스킬 없이, apple-design-skill, mobile-app-ui-design). 대화 없는 실행 6번, 어림 약 1.96달러. 화면은 띄워 눈으로 비교. 채택 1: hallmark(화면 만들기의 대안). 보류 3: unslop, apple-design-skill, mobile-app-ui-design. 시험 중 1: oil-ui. 기본 가지에 바로 올림. 되돌리기: 이 커밋을 git revert
 - 2026-11-16 | scout 디자인 재검토(손으로 실행) | 성공 | 사용자 지시로 디자인 분야를 다시 봄. 같은 소개 페이지 과제를 네 방식으로 실행해 화면을 띄워 비교하고, impeccable의 점검·다듬기를 따로 시험(대화 없는 실행 5번, 어림 약 1.25달러). 채택 2: frontend-design(화면 만들기), impeccable(점검·다듬기). 새 디자인 후보 11개와 ECC를 기록. 정책에 "디자인 분야" 절을 더해 디자인 도구는 변경 제안 없이 바로 올리게 함. 이 변경도 그 지시에 따라 기본 가지에 바로 올림. 되돌리기: 이 커밋을 git revert
