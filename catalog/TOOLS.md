@@ -12,14 +12,14 @@
 
 | 이름 | 역할 | 상태 | 해당하는 프로젝트 | 설치 | 컨텍스트 비용 | 이유 | 확인 날짜 | 출처 주소 |
 |---|---|---|---|---|---|---|---|---|
-| superpowers | 일하는 절차 묶음(계획, 테스트 주도, 디버깅 스킬) | 후보 | 모든 프로젝트 | - | 미확인 | 기준일 무렵 널리 쓰임. 키트의 일하는 방식과 겹치는지 평가 필요 | 미확인 | 미확인 |
-| frontend-design | 화면 디자인 품질 | 후보 | 화면이 있는 프로젝트 | - | 미확인 | 기준일 무렵 널리 쓰임. visual-design 규칙과 겹치는지 평가 필요 | 미확인 | 미확인 |
-| context7 | 라이브러리 최신 문서 조회 | 후보 | 외부 라이브러리를 쓰는 프로젝트 | - | 미확인 | freshness 순환의 문서 확인을 도울 수 있음 | 미확인 | 미확인 |
-| security-guidance | 코드 변경의 보안 점검 | 후보 | 모든 프로젝트 | - | 미확인 | 공식 문서에 안내 페이지가 있음 | 미확인 | 미확인 |
-| 언어 서버 플러그인들 | 타입 오류 확인과 기호 탐색 | 후보 | 해당 언어의 프로젝트 | - | 미확인 | 공식 문서에 "코드 인텔리전스 플러그인" 페이지가 있음. 언어별로 따로 평가 | 미확인 | 미확인 |
-| github | 저장소 호스팅 연동 | 후보 | 깃허브를 쓰는 프로젝트 | - | 미확인 | `gh` 명령줄 도구와 역할이 겹치는지 평가 필요 | 미확인 | 미확인 |
-| playwright | 브라우저 자동 조작과 화면 확인 | 후보 | 웹 | - | 미확인 | 웹의 확인 수단(스크린샷, 콘솔 오류) 후보 | 미확인 | 미확인 |
-| chrome-devtools-mcp | 브라우저 개발자 도구 연결 | 후보 | 웹 | - | 미확인 | playwright와 같은 역할. 둘 중 하나만 | 미확인 | 미확인 |
-| impeccable | 화면 디자인·다듬기 | 후보 | 화면이 있는 프로젝트 | - | 미확인 | frontend-design과 같은 역할. 둘 중 하나만 | 미확인 | 미확인 |
-| ui-ux-pro-max | 화면 디자인 참고 자료 | 후보 | 화면이 있는 프로젝트 | - | 미확인 | frontend-design과 같은 역할. 둘 중 하나만 | 미확인 | 미확인 |
-| rtk | 명령 출력 줄이기(컨텍스트 절약) | 후보 | 모든 프로젝트 | - | 미확인 | 컨텍스트 절약 후보. 실행 범위와 세 운영체제 지원 확인 필요 | 미확인 | 미확인 |
+| superpowers | 일하는 절차 묶음(계획, 테스트 주도, 디버깅 스킬) | 후보 | 모든 프로젝트 | - | 미확인 | 공식 마켓플레이스 등재, 저장소 유지 중(MIT, 최근 올림 2026-11-03). 키트의 일하는 방식(AGENTS.md, retro)과 역할이 겹쳐 시험으로 비교 필요 | 2026-11-16 | https://github.com/obra/superpowers |
+| frontend-design | 화면 디자인 품질 | 후보 | 화면이 있는 프로젝트 | - | 미확인 | 공식 마켓플레이스 등재(Anthropic 제공). visual-design 규칙과 겹치는지 시험 필요 | 2026-11-16 | https://github.com/anthropics/claude-plugins-official |
+| context7 | 라이브러리 최신 문서 조회 | 후보 | 외부 라이브러리를 쓰는 프로젝트 | - | 미확인 | 공식 마켓플레이스 등재, 저장소 유지 중(MIT). 외부 서버에 조회 내용을 보내는 연결이라 수집 정보 확인 필요. freshness의 문서 확인을 도울 수 있음 | 2026-11-16 | https://github.com/upstash/context7 |
+| security-guidance | 코드 변경의 보안 점검 | 후보 | 모든 프로젝트 | - | 미확인 | 공식 마켓플레이스 등재(Anthropic 제공), 공식 문서에 안내 페이지 있음. 수정 때와 종료 때 훅이 돌아 속도 영향 시험 필요 | 2026-11-16 | https://code.claude.com/docs/en/security-guidance.md |
+| 언어 서버 플러그인들 | 타입 오류 확인과 기호 탐색 | 후보 | 해당 언어의 프로젝트 | - | 미확인 | 공식 마켓플레이스에 언어별로 등재(typescript, pyright, gopls, rust-analyzer, clangd, jdtls, kotlin, swift, csharp, php, ruby, lua). 각 언어 서버를 따로 설치해야 함. 언어별로 시험 필요 | 2026-11-16 | https://code.claude.com/docs/en/plugins/code-intelligence.md |
+| github | 저장소 호스팅 연동 | 후보 | 깃허브를 쓰는 프로젝트 | - | 미확인 | 공식 마켓플레이스 등재, 저장소 유지 중(MIT). 키트는 이미 gh 명령줄 도구를 쓰므로 그보다 나은 점이 있는지 시험 필요 | 2026-11-16 | https://github.com/github/github-mcp-server |
+| playwright | 브라우저 자동 조작과 화면 확인 | 후보 | 웹 | - | 미확인 | 공식 마켓플레이스 등재, 저장소 유지 중(Apache-2.0). 웹의 확인 수단 후보. chrome-devtools-mcp와 같은 역할이라 둘을 비교 시험해 하나만 | 2026-11-16 | https://github.com/microsoft/playwright-mcp |
+| chrome-devtools-mcp | 브라우저 자동 조작과 화면 확인 | 후보 | 웹 | - | 미확인 | 공식 마켓플레이스 등재, 저장소 유지 중(Apache-2.0). playwright와 같은 역할이라 둘을 비교 시험해 하나만 | 2026-11-16 | https://github.com/ChromeDevTools/chrome-devtools-mcp |
+| impeccable | 화면 디자인 품질 | 후보 | 화면이 있는 프로젝트 | - | 미확인 | 공식 마켓플레이스에 없음(커뮤니티), 저장소 유지 중(Apache-2.0). frontend-design과 같은 역할이라 비교 시험해 하나만 | 2026-11-16 | https://github.com/pbakaus/impeccable |
+| ui-ux-pro-max | 화면 디자인 품질 | 후보 | 화면이 있는 프로젝트 | - | 미확인 | 공식 마켓플레이스에 없음(커뮤니티), 저장소 유지 중(MIT). frontend-design과 같은 역할이라 비교 시험해 하나만 | 2026-11-16 | https://github.com/nextlevelbuilder/ui-ux-pro-max-skill |
+| rtk | 명령 출력 줄이기(컨텍스트 절약) | 후보 | 모든 프로젝트 | - | 미확인 | 공식 마켓플레이스에 없음(커뮤니티), 저장소 유지 중(Apache-2.0). 플러그인이 아니라 따로 설치하는 실행 파일이고 명령을 가로채 실행하므로 실행 범위와 세 운영체제 지원 확인 필요 | 2026-11-16 | https://github.com/rtk-ai/rtk |
