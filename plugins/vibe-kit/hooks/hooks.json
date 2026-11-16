@@ -12,6 +12,18 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/learn-on-correction.js"],
+            "timeout": 5
+          }
+        ]
+      }
     ]
   }
 }

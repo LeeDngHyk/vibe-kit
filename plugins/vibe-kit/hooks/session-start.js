@@ -52,6 +52,30 @@ function openLearnings(text) {
   return m ? m.length : 0;
 }
 
+// LEARNINGS.md에서 "확신"이 높은데 아직 설정에 반영되지 않은 배움을 고른다.
+// 설정(훅·규칙·AGENTS.md)에 반영된 것은 이미 읽히므로 넣지 않는다.
+// 컨텍스트를 아끼려고 최대 5개, 한 줄씩만 넣는다.
+function strongLearnings(text) {
+  if (!text) return [];
+  const body = text.replace(/```[\s\S]*?```/g, '');
+  const out = [];
+  for (const block of body.split(/^## /m).slice(1)) {
+    const title = block.split(/\r?\n/)[0].replace(/^\d{4}-\d{2}-\d{2}\s*/, '').trim();
+    const field = (name) => {
+      const m = block.match(new RegExp('^-\\s*' + name + ':\\s*(.+)$', 'm'));
+      return m ? m[1].trim() : '';
+    };
+    const confidence = parseFloat(field('확신'));
+    const status = field('상태');
+    if (!(confidence >= 0.7)) continue;
+    if (!/^(관찰됨|제안됨)/.test(status)) continue;
+    const action = field('지킬 것') || title;
+    if (action) out.push({ confidence, text: action.slice(0, 160) });
+  }
+  out.sort((a, b) => b.confidence - a.confidence);
+  return out.slice(0, 5);
+}
+
 // STATE.md의 "## 다음 할 일" 아래 첫 번째 목록 항목을 읽는다.
 function firstNextStep(text) {
   if (!text) return null;
@@ -144,8 +168,14 @@ function main() {
     } else {
       lines.push('마지막 점검: 기록 없음');
     }
-    const open = openLearnings(readText(path.join(dir, 'LEARNINGS.md')));
+    const learnings = readText(path.join(dir, 'LEARNINGS.md'));
+    const open = openLearnings(learnings);
     lines.push(`미처리 배운 점: ${open}건` + (open >= 3 ? ' → /vibe-kit:retro 실행을 제안하세요.' : ''));
+    const strong = strongLearnings(learnings);
+    if (strong.length) {
+      lines.push('이 프로젝트에서 배운 것(확신 높음, 아직 설정에 반영 전). 이번 작업에서도 지킨다:');
+      for (const s of strong) lines.push(`- ${s.text} (확신 ${s.confidence})`);
+    }
     const next = firstNextStep(state);
     lines.push(`다음 할 일: ${next || '없음'}`);
   }

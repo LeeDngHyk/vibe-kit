@@ -263,6 +263,41 @@ function runHook(script, input, cwd) {
   fs.writeFileSync(path.join(proj, 'docs', 'agent', 'STATE.md'), '# 상태\n\n## 다음 할 일\n\n- 예시\n');
   expectContext(runHook(start, startInput(proj), proj), '환경 있는 프로젝트');
   runHook(start, {}, tmp); // 입력이 비어도 끝나야 한다
+  // 확신이 높고 아직 반영되지 않은 배움만 세션 시작 때 안내된다.
+  fs.writeFileSync(
+    path.join(proj, 'docs', 'agent', 'LEARNINGS.md'),
+    '# 배운 점\n\n<!-- 여기부터 항목 -->\n\n' +
+      '## 2026-01-01 높은 확신\n- 지킬 것: 커밋 메시지는 한국어로 쓴다\n- 확신: 0.9\n- 상태: 관찰됨\n\n' +
+      '## 2026-01-02 낮은 확신\n- 지킬 것: 낮은확신문장\n- 확신: 0.3\n- 상태: 관찰됨\n\n' +
+      '## 2026-01-03 이미 반영됨\n- 지킬 것: 반영된문장\n- 확신: 0.9\n- 상태: 적용됨\n'
+  );
+  {
+    const out = runHook(start, startInput(proj), proj);
+    if (!out.includes('커밋 메시지는 한국어로 쓴다')) fail('session-start.js: 확신 높은 배움이 안내되지 않음');
+    if (out.includes('낮은확신문장') || out.includes('반영된문장')) fail('session-start.js: 안내하지 말아야 할 배움이 안내됨');
+  }
+  // 계속 배우기 훅: 교정·지속 요청에만 반응하고, 평범한 요청과 키트 환경이 없는 폴더에서는 조용하다.
+  const learn = path.join(PLUGIN, 'hooks', 'learn-on-correction.js');
+  const say = (prompt, cwd) => runHook(learn, { hook_event_name: 'UserPromptSubmit', prompt, cwd }, cwd);
+  const LEARN_CASES = [
+    ['교정', '아니, 그게 아니라 버튼을 오른쪽에 둬야지'],
+    ['교정', '내가 아까 말했잖아 탭 말고 스페이스'],
+    ['교정', 'no, that is not what I asked for'],
+    ['지속', '앞으로는 커밋 메시지를 한국어로 써줘'],
+    ['지속', 'from now on run the tests before finishing'],
+    ['평범', '로그인 화면을 만들어줘'],
+    ['평범', '항상 켜져 있는 서버를 만들어줘'],
+    ['평범', '잘못된 입력을 걸러내는 코드를 추가해줘'],
+    ['평범', '아니면 다른 방법도 있어?'],
+    ['평범', '/vibe-kit:retro'],
+  ];
+  for (const [want, prompt] of LEARN_CASES) {
+    const out = say(prompt, proj);
+    const got = !out.trim() ? '평범' : out.includes('계속 지켜 달라는 요청으로 보입니다') ? '지속' : '교정';
+    if (got !== want) fail(`learn-on-correction.js: "${prompt}"를 ${want}(으)로 봐야 하는데 ${got}(으)로 봄`);
+  }
+  expectSilent(say('아니, 그게 아니라 다시 해줘', tmp), '계속 배우기 훅, 키트 환경 없는 폴더');
+  runHook(learn, {}, tmp); // 입력이 비어도 끝나야 한다
   // 프로젝트 훅 본: ES 모듈 방식 프로젝트(package.json에 "type": "module") 안에 복사해도 돌아야 한다.
   const esm = path.join(tmp, 'esm', '.claude', 'hooks');
   fs.mkdirSync(esm, { recursive: true });

@@ -12,7 +12,7 @@
 | 비공개 마켓플레이스와 자동 업데이트 | - | - | 2026-11-16 | https://code.claude.com/docs/en/plugins/host-marketplace.md | 컴퓨터에 저장된 git 인증을 씀. 자동 업데이트는 기본 꺼짐, `/plugin`에서 켬 |
 | 스킬 머리말 | - | - | 2026-11-16 | https://code.claude.com/docs/en/skills.md | `description`과 `when_to_use` 합쳐 1,536자 상한 |
 | 서브에이전트 머리말 | - | - | 2026-11-16 | https://code.claude.com/docs/en/sub-agents.md | `model: inherit`. 플러그인 서브에이전트는 `permissionMode`, `hooks`, `mcpServers` 무시 |
-| 훅 (SessionStart, PostToolUse, Stop) | - | - | 2026-11-16 | https://code.claude.com/docs/en/hooks.md | `args`를 주면 셸 없이 실행. Stop 훅은 연속 8번까지만 막음 |
+| 훅 (SessionStart, UserPromptSubmit, PostToolUse, Stop) | - | - | 2026-11-16 | https://code.claude.com/docs/en/hooks.md | `args`를 주면 셸 없이 실행. Stop 훅은 연속 8번까지만 막음. UserPromptSubmit은 입력의 `prompt`로 사용자의 말을 받고 `additionalContext`로 안내를 더함(고르는 조건 없이 매번 돎) |
 | 프로젝트 지시 파일 (`AGENTS.md`, `CLAUDE.md`, `.claude/rules/`) | - | - | 2026-11-16 | https://code.claude.com/docs/en/memory.md | `AGENTS.md`는 2.1.277부터 직접 읽힘. `CLAUDE.md`가 있으면 `@AGENTS.md` 불러오기 필요 |
 | 권한 규칙 문법 | - | - | 2026-11-16 | https://code.claude.com/docs/en/permissions.md | `Bash(명령 *)`, `Read(**/.env)` |
 | 대화 없는 실행 (`claude -p`) | - | - | 2026-11-16 | https://code.claude.com/docs/en/headless.md | `--permission-prompts none`(2.1.259부터), `--max-turns`, `--max-budget-usd`(어림값) |
