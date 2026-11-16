@@ -19,7 +19,12 @@
       "Bash(gh pr create *)",
       "Bash(gh pr list *)",
       "Bash(gh pr view *)",
-      "Bash(node scripts/validate.js *)"
+      "Bash(node scripts/validate.js *)",
+      "Bash(git switch -c *)",
+      "Bash(git rev-parse *)",
+      "Bash(git ls-remote *)",
+      "Bash(node scripts/validate.js)",
+      "Bash(gh auth status)"
     ],
     "deny": [
       "Bash(git push --force *)",
