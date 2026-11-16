@@ -76,7 +76,7 @@ description: 지금 프로젝트 폴더에 맞는 바이브 코딩 환경(AGENTS
 
 **.claude/rules/** — 머리말의 `paths`를 이 프로젝트의 실제 경로 무늬로 바꾼다. 경로는 프로젝트 뿌리 기준이다. `user-experience.md`는 사람이 마주하는 모든 부분(화면, 명령줄 입출력, 공개 API), `visual-design.md`는 그중 화면을 그리는 파일만 가리킨다. 화면만 있는 앱에서는 두 무늬가 같아도 된다. `visual-design.md`에서 디자인 값을 모아 둔 곳이 아직 없으면 그 줄을 "글꼴, 색, 간격을 모아 둘 곳이 아직 없다. 화면을 더 만들기 전에 한 곳을 정하자고 사용자에게 제안한다"로 바꿔 쓴다. `user-experience.md`의 "이 프로젝트에서는" 절은 결과물 형태에 맞는 줄만 남긴다.
 
-**.claude/hooks/** — `format-after-edit.js`, `check-before-stop.js`는 본 그대로 복사하고, `vibe-kit.json`에 명령을 채운다. 승인받지 않은 쪽은 비워 둔다. 그리고 `.claude/settings.json`에 승인받은 훅만 등록한다:
+**.claude/hooks/** — `format-after-edit.js`, `check-before-stop.js`는 본 그대로 복사하고, `vibe-kit.json`에 명령을 채운다. 훅을 하나만 승인받았어도 세 파일을 모두 복사하고, 승인받지 않은 쪽은 `vibe-kit.json`에서 비워 두고 `settings.json`에 등록하지 않는다. 그리고 `.claude/settings.json`에 승인받은 훅만 등록한다:
 
 ```json
 {
@@ -128,7 +128,7 @@ description: 지금 프로젝트 폴더에 맞는 바이브 코딩 환경(AGENTS
 3. 규칙 파일의 `paths` 무늬마다 실제로 맞는 파일이 하나 이상 있다(새 프로젝트라 아직 없으면 그렇게 적는다).
 4. 만든 파일에 이 프로젝트가 쓰지 않는 기술의 이름이나 명령이 없다. `AGENTS.md`, `.claude/settings.json`, `.claude/rules/`, `.claude/hooks/vibe-kit.json`, `docs/agent/STACK.md`에 나오는 도구·언어·명령 이름을 하나씩 뽑아, 1단계에서 파악한 기술 목록에 있는지 본다. 목록에 없는 이름이 있으면 지운다.
 5. `AGENTS.md`가 70줄을 넘지 않는다.
-6. 훅을 등록했으면 예시 입력으로 직접 실행한다: `echo {} | node .claude/hooks/check-before-stop.js`. 종료 코드가 0이고 **아무것도 출력되지 않아야** 통과다. `"decision":"block"`이 출력되면 검사 명령이 실패한 것이다. 원인이 설치되지 않은 도구면 그 명령을 `vibe-kit.json`에서 빼고 보고에 적는다. 원인이 프로젝트의 기존 실패면 그대로 두고 보고에 적는다.
+6. 훅을 등록했으면 예시 입력으로 직접 실행한다: `echo {} | node .claude/hooks/check-before-stop.js`. 종료 코드가 0이고 **아무것도 출력되지 않아야** 통과다. `"decision":"block"`이 출력되면 검사 명령이 실패한 것이다. 원인이 설치되지 않은 도구면 그 명령을 `vibe-kit.json`에서 빼고 보고에 적는다. 원인이 프로젝트의 기존 실패면 그대로 두고 보고에 적는다. 자동 정리 훅은 `echo {"tool_input":{"file_path":"<프로젝트의 실제 파일>"}} | node .claude/hooks/format-after-edit.js`로 실행해 종료 코드 0을 확인한다.
 
 보고에는 다음을 넣는다: 만든 파일 목록, 만들지 않은 파일과 이유, 실행한 확인 명령과 결과, 확인하지 못한 것, 그리고 "설정과 규칙은 새 세션부터 적용된다"는 안내. 변경은 프로젝트 코드와 분리된 `chore(agent): 키트 환경 추가` 커밋으로 남기자고 제안한다. 프로젝트 폴더 바로 안에 `.git`이 있을 때만 제안한다. 위쪽 폴더가 저장소인 경우에는 제안하지 않고 그 사실을 보고에 적는다.
 
