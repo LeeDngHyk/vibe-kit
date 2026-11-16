@@ -15,7 +15,6 @@
 
 - 실제 프로젝트에서 `/vibe-kit:setup`을 써 보고 막히는 곳을 `docs/LEARNINGS.md`에 적는다.
 - 웹이 아닌 화면용 디자인 도구는 접근성 하나뿐이다. 라이선스가 명시된 후보를 더 찾는다(공식 마켓플레이스의 expo 등). 보류한 ECC의 SwiftUI·Compose 스킬은 빌드할 수 있는 환경에서 다시 본다.
-- oil-ui의 "여러 방향을 나란히 비교" 기능을 대화형 세션에서 시험한다.
 - 채택한 디자인 도구 셋(frontend-design, impeccable, hallmark)을 실제 프로젝트에서 써 보고 `docs/LEARNINGS.md`에 적는다. 설치본(스크립트 포함)의 동작은 아직 시험하지 못했다.
 - 계속 배우기 훅이 실제 작업에서 교정을 제대로 짚는지 본다(놓친 교정, 잘못 짚은 말을 `docs/LEARNINGS.md`에 적는다). 낱말 무늬는 한국어와 영어만 본다.
 - 남은 후보 시험: 브라우저 확인 도구 둘(playwright, chrome-devtools-mcp)의 비교, 언어 서버 플러그인(언어 서버가 있는 프로젝트에서), security-guidance(대화형 세션에서), 커뮤니티 후보(impeccable, ui-ux-pro-max, rtk, superpowers, context7, serena, modern-web-guidance).
@@ -29,6 +28,7 @@
 `scout`와 정기 실행의 기록이다. 형식: `- 날짜 | 무엇 | 결과 | 한 일, 만든 변경 제안, 실패 원인`
 
 <!-- 실행 기록: 새 줄을 이 표시 바로 아래에 넣는다 -->
+- 2026-11-16 | scout 남은 후보 시험(손으로 실행) | 성공 | 후보 9개를 15번의 대화 없는 실행으로 시험(뒤 묶음은 S: 드라이브에서. 어림 약 2.6달러). 고친 절차대로 비교 전에 스킬이 불렸는지 확인함. 채택 3(디자인): oil-ui(방향 탐색), hue(브랜드에서 디자인 값), motion-advanced(움직임 묶음에 더함). 거절 1: oil-motion. 보류 3: superpowers, modern-web-guidance, playwright. 시험 못 함: context7(인증 필요). chrome-devtools-mcp는 시험을 통과해 채택 제안을 따로 올림. 시험하지 않은 것: ui-ux-pro-max(스크립트 165개), serena, rtk(프로그램 설치 필요), superdesign(외부 계정), stitch-skills, ux-ui-agent-skills, github(토큰 필요). 기본 가지에 바로 올림. 되돌리기: 이 커밋을 git revert
 - 2026-11-16 | scout ECC 나머지 디자인 스킬 시험(손으로 실행) | 성공(한 번 다시 함) | ECC의 화면 관련 스킬 13개의 글을 읽고, 시험할 수 있는 6개를 네 과제(SwiftUI, Compose, React 움직임, React 접근성)로 시험. 첫 실행은 시험 준비 스크립트의 실수로 스킬 폴더가 엉뚱한 곳에 복사돼 스킬 없이 돈 것을 실행 보고에서 발견하고 다시 실행함(대화 없는 실행 14번, 어림 약 2.3달러). 채택 1: motion-foundations + motion-patterns(움직임). 보류 4, 후보 3, 범위 밖 1줄. 기본 가지에 바로 올림. 되돌리기: 이 커밋을 git revert
 - 2026-11-16 | scout ECC 디자인 스킬 시험(손으로 실행) | 성공 | ECC의 낱개 스킬 셋의 글만 받아 격리 폴더에서 시험(대화 없는 실행 3번, 어림 약 0.59달러). 채택 2: ECC design-system(디자인 값·참고 자료), ECC accessibility(접근성). 보류 1: ECC frontend-design-direction. 낱개 스킬을 복사해 들이는 절차를 setup에 더함. 변경 제안: feat/learning-and-search-first
 - 2026-11-16 | scout 디자인 2차 시험(손으로 실행) | 성공 | 새 후보 다섯 개의 스킬 글만 받아(스크립트는 받지도 실행하지도 않음) 격리 폴더에서 시험: 웹 화면 만들기 2(oil-ui, hallmark), 다듬기 1(unslop), React Native 화면 검토 3(스킬 없이, apple-design-skill, mobile-app-ui-design). 대화 없는 실행 6번, 어림 약 1.96달러. 화면은 띄워 눈으로 비교. 채택 1: hallmark(화면 만들기의 대안). 보류 3: unslop, apple-design-skill, mobile-app-ui-design. 시험 중 1: oil-ui. 기본 가지에 바로 올림. 되돌리기: 이 커밋을 git revert
