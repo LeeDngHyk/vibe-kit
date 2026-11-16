@@ -16,6 +16,8 @@ description: 지금 프로젝트 폴더에 맞는 바이브 코딩 환경(AGENTS
 
 ## 1단계: 파악 (읽기만)
 
+먼저 이 세션이 프로젝트 폴더에서 열렸는지 확인한다. Claude Code는 세션을 연 폴더의 `.claude/settings.json`과 훅만 읽는다. 환경을 만들 프로젝트가 세션을 연 폴더의 하위 폴더이면(예: 여러 프로젝트가 든 폴더에서 세션을 열고 그중 하나를 다루는 경우) 거기에 만든 권한과 훅은 적용되지 않는다. 이 경우 만들기 전에 사용자에게 알리고, 프로젝트 폴더에서 세션을 새로 열어 실행하자고 제안한다. 사용자가 그대로 진행하길 원하면 진행하되, 보고에 "이 설정은 프로젝트 폴더에서 연 세션에서만 적용된다"고 적는다.
+
 다음을 코드와 패키지 파일에서 읽어 알아낸다. 추측한 것은 추측이라고 표시한다.
 
 1. 폴더가 비어 있는지 확인한다. 아무것도 없거나 `.git`, `.gitignore`만 있으면 빈 폴더로 본다. 코드는 없고 README나 메모 같은 글만 있으면 그 글을 읽은 뒤 빈 폴더처럼 3번으로 간다. `AGENTS.md`, `CLAUDE.md`, `.claude/`, `docs/agent/`가 있으면 빈 폴더가 아니다(4단계의 합치기 대상).
@@ -59,7 +61,7 @@ description: 지금 프로젝트 폴더에 맞는 바이브 코딩 환경(AGENTS
 | `.claude/rules/user-experience.md` | `templates/rules/user-experience.md` | 사람이 직접 마주하는 부분의 코드 경로가 있을 때 |
 | `.claude/rules/visual-design.md` | `templates/rules/visual-design.md` | 화면이 있는 프로젝트만 |
 | `.claude/rules/testing.md` | `templates/rules/testing.md` | 테스트 도구가 있고 테스트 파일이 하나 이상 있을 때. 테스트 파일이 아직 없으면 만들지 않는다(이름 관례를 지어내지 않기 위해) |
-| `.claude/hooks/` 세 파일 | `templates/hooks/` | 훅을 하나라도 승인받았을 때 |
+| `.claude/hooks/` 세 파일(`.cjs` 둘과 `vibe-kit.json`) | `templates/hooks/` (`settings-hooks.json`은 복사하지 않는다) | 훅을 하나라도 승인받았을 때 |
 | `docs/agent/STATE.md`, `STACK.md`, `LEARNINGS.md` | `templates/docs-agent/` | 항상 |
 
 ### 파일별 채우는 법
@@ -73,32 +75,13 @@ description: 지금 프로젝트 폴더에 맞는 바이브 코딩 환경(AGENTS
 - `ask`에 더한다: 이 프로젝트의 패키지 관리 도구로 패키지를 설치·추가·제거하는 명령.
 - 승인받은 플러그인은 `enabledPlugins`에 `"<플러그인>@<마켓플레이스>": true`로 적는다.
 - 프로젝트가 쓰지 않는 도구의 명령은 넣지 않는다.
+- 본의 `ask`와 `deny` 규칙은 스스로 빼거나 느슨하게 하지 않는다. 사용자가 분명히 요청했을 때만 바꾸고(예: 원격 저장소로 보내기를 묻지 않게), 바꾼 규칙과 그 결과(무엇이 더는 묻지 않고 실행되는지)를 계획과 보고에 적는다.
 
-**.claude/rules/** — 머리말의 `paths`를 이 프로젝트의 실제 경로 무늬로 바꾼다. 경로는 프로젝트 뿌리 기준이다. `user-experience.md`는 사람이 마주하는 모든 부분(화면, 명령줄 입출력, 공개 API), `visual-design.md`는 그중 화면을 그리는 파일만 가리킨다. 화면만 있는 앱에서는 두 무늬가 같아도 된다. `visual-design.md`에서 디자인 값을 모아 둔 곳이 아직 없으면 그 줄을 "글꼴, 색, 간격을 모아 둘 곳이 아직 없다. 화면을 더 만들기 전에 한 곳을 정하자고 사용자에게 제안한다"로 바꿔 쓴다. `user-experience.md`의 "이 프로젝트에서는" 절은 결과물 형태에 맞는 줄만 남긴다.
+**.claude/rules/** — 머리말의 `paths`를 이 프로젝트의 실제 경로 무늬로 바꾼다. 경로는 프로젝트 뿌리 기준이다. 사람이 고치는 원본 파일을 가리키게 한다. 빌드 명령이 만들어 내는 결과물 폴더는 가리키지 않는다(그 폴더가 곧 원본인 프로젝트는 예외이고, 그렇게 판단한 근거를 계획에 적는다). `user-experience.md`는 사람이 마주하는 모든 부분(화면, 명령줄 입출력, 공개 API), `visual-design.md`는 그중 화면을 그리는 파일만 가리킨다. 화면만 있는 앱에서는 두 무늬가 같아도 된다. `visual-design.md`에서 디자인 값을 모아 둔 곳이 아직 없으면 그 줄을 "글꼴, 색, 간격을 모아 둘 곳이 아직 없다. 화면을 더 만들기 전에 한 곳을 정하자고 사용자에게 제안한다"로 바꿔 쓴다. `user-experience.md`의 "이 프로젝트에서는" 절은 결과물 형태에 맞는 줄만 남긴다.
 
-**.claude/hooks/** — `format-after-edit.js`, `check-before-stop.js`는 본 그대로 복사하고, `vibe-kit.json`에 명령을 채운다. 훅을 하나만 승인받았어도 세 파일을 모두 복사하고, 승인받지 않은 쪽은 `vibe-kit.json`에서 비워 두고 `settings.json`에 등록하지 않는다. 그리고 `.claude/settings.json`에 승인받은 훅만 등록한다:
+**.claude/hooks/** — `format-after-edit.cjs`, `check-before-stop.cjs`는 본 그대로 복사하고, `vibe-kit.json`에 명령을 채운다. 훅을 하나만 승인받았어도 세 파일을 모두 복사하고, 승인받지 않은 쪽은 `vibe-kit.json`에서 비워 두고 `settings.json`에 등록하지 않는다. 그리고 `.claude/settings.json`에 승인받은 훅만 등록한다. 등록할 내용은 본 `templates/hooks/settings-hooks.json`에 있다. 그 파일을 읽어 승인받은 쪽(`PostToolUse`는 수정 후 자동 정리, `Stop`은 종료 전 검사)만 `settings.json`의 `hooks`에 옮긴다. `args` 안의 경로는 글자 하나 바꾸지 않고 그대로 옮긴다. 맨 앞의 달러 기호와 중괄호로 된 부분은 Claude Code가 실행할 때 프로젝트 뿌리로 바꿔 주는 자리표시다. 이것을 이 컴퓨터의 실제 폴더 경로로 바꿔 쓰면 다른 컴퓨터에서 훅이 돌지 않는다.
 
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          { "type": "command", "command": "node", "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/format-after-edit.js"], "timeout": 60 }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          { "type": "command", "command": "node", "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/check-before-stop.js"], "timeout": 300 }
-        ]
-      }
-    ]
-  }
-}
-```
+훅 파일의 확장자는 `.cjs`다. 프로젝트의 패키지 설정이 어떤 모듈 방식이든 똑같이 돌게 하기 위해서이니 `.js`로 바꾸지 않는다.
 
 자동 정리 명령은 프로젝트에 설치된 포맷터를 부르는 꼴로 적고, 없을 때 내려받아 실행하는 꼴은 쓰지 않는다. `extensions`에는 그 포맷터가 다루는 확장자 중 이 프로젝트에 실제로 있는 것만 넣는다.
 
@@ -128,7 +111,7 @@ description: 지금 프로젝트 폴더에 맞는 바이브 코딩 환경(AGENTS
 3. 규칙 파일의 `paths` 무늬마다 실제로 맞는 파일이 하나 이상 있다(새 프로젝트라 아직 없으면 그렇게 적는다).
 4. 만든 파일에 이 프로젝트가 쓰지 않는 기술의 이름이나 명령이 없다. `AGENTS.md`, `.claude/settings.json`, `.claude/rules/`, `.claude/hooks/vibe-kit.json`, `docs/agent/STACK.md`에 나오는 도구·언어·명령 이름을 하나씩 뽑아, 1단계에서 파악한 기술 목록에 있는지 본다. 목록에 없는 이름이 있으면 지운다.
 5. `AGENTS.md`가 70줄을 넘지 않는다.
-6. 훅을 등록했으면 예시 입력으로 직접 실행한다: `echo {} | node .claude/hooks/check-before-stop.js`. 종료 코드가 0이고 **아무것도 출력되지 않아야** 통과다. `"decision":"block"`이 출력되면 검사 명령이 실패한 것이다. 원인이 설치되지 않은 도구면 그 명령을 `vibe-kit.json`에서 빼고 보고에 적는다. 원인이 프로젝트의 기존 실패면 그대로 두고 보고에 적는다. 자동 정리 훅은 `echo {"tool_input":{"file_path":"<프로젝트의 실제 파일>"}} | node .claude/hooks/format-after-edit.js`로 실행해 종료 코드 0을 확인한다.
+6. 훅을 등록했으면 예시 입력으로 직접 실행한다: `echo {} | node .claude/hooks/check-before-stop.cjs`. 종료 코드가 0이고 **아무것도 출력되지 않아야** 통과다. `"decision":"block"`이 출력되면 검사 명령이 실패한 것이다. 원인이 설치되지 않은 도구면 그 명령을 `vibe-kit.json`에서 빼고 보고에 적는다. 원인이 프로젝트의 기존 실패면 그대로 두고 보고에 적는다. 자동 정리 훅은 `echo {"tool_input":{"file_path":"<프로젝트의 실제 파일>"}} | node .claude/hooks/format-after-edit.cjs`로 실행해 종료 코드 0을 확인한다.
 
 보고에는 다음을 넣는다: 만든 파일 목록, 만들지 않은 파일과 이유, 실행한 확인 명령과 결과, 확인하지 못한 것, 그리고 "설정과 규칙은 새 세션부터 적용된다"는 안내. 변경은 프로젝트 코드와 분리된 `chore(agent): 키트 환경 추가` 커밋으로 남기자고 제안한다. 프로젝트 폴더 바로 안에 `.git`이 있을 때만 제안한다. 위쪽 폴더가 저장소인 경우에는 제안하지 않고 그 사실을 보고에 적는다.
 

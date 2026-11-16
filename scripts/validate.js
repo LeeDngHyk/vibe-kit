@@ -105,6 +105,13 @@ for (const name of ['setup', 'retro', 'freshness', 'scout']) {
     else if (fm.description.length > 1536) fail(`description이 1,536자를 넘음: ${relPath(f)}`);
   }
 }
+// 스킬 글 안의 프로젝트 경로 변수는 스킬을 읽을 때 실제 경로로 바뀌어 버린다. 설정에 옮겨 적을 값은 본 파일에 둔다.
+for (const name of ['setup', 'retro', 'freshness', 'scout']) {
+  const f = path.join(PLUGIN, 'skills', name, 'SKILL.md');
+  if (fs.existsSync(f) && fs.readFileSync(f, 'utf8').includes('${CLAUDE_' + 'PROJECT_DIR}')) {
+    fail(`스킬 글에 프로젝트 경로 변수가 있음(읽을 때 실제 경로로 바뀜). 본 파일로 옮긴다: ${relPath(f)}`);
+  }
+}
 for (const name of ['researcher', 'reviewer']) {
   const f = path.join(PLUGIN, 'agents', `${name}.md`);
   if (!fs.existsSync(f)) continue;
@@ -256,8 +263,14 @@ function runHook(script, input, cwd) {
   fs.writeFileSync(path.join(proj, 'docs', 'agent', 'STATE.md'), '# 상태\n\n## 다음 할 일\n\n- 예시\n');
   expectContext(runHook(start, startInput(proj), proj), '환경 있는 프로젝트');
   runHook(start, {}, tmp); // 입력이 비어도 끝나야 한다
-  for (const name of ['format-after-edit.js', 'check-before-stop.js']) {
-    runHook(path.join(PLUGIN, 'templates', 'hooks', name), { cwd: tmp, tool_input: { file_path: path.join(tmp, 'none.txt') } }, tmp);
+  // 프로젝트 훅 본: ES 모듈 방식 프로젝트(package.json에 "type": "module") 안에 복사해도 돌아야 한다.
+  const esm = path.join(tmp, 'esm', '.claude', 'hooks');
+  fs.mkdirSync(esm, { recursive: true });
+  fs.writeFileSync(path.join(tmp, 'esm', 'package.json'), '{"type":"module"}');
+  fs.copyFileSync(path.join(PLUGIN, 'templates', 'hooks', 'vibe-kit.json'), path.join(esm, 'vibe-kit.json'));
+  for (const name of ['format-after-edit.cjs', 'check-before-stop.cjs']) {
+    fs.copyFileSync(path.join(PLUGIN, 'templates', 'hooks', name), path.join(esm, name));
+    runHook(path.join(esm, name), { cwd: tmp, tool_input: { file_path: path.join(tmp, 'none.txt') } }, path.join(tmp, 'esm'));
   }
   process.env = env;
   fs.rmSync(tmp, { recursive: true, force: true });
