@@ -7,6 +7,8 @@
 | 이름 | 하는 일 | 쓰는 법 |
 |---|---|---|
 | `setup` | 프로젝트 폴더에 맞는 환경(`AGENTS.md`, `CLAUDE.md`, `.claude/`, `docs/agent/`)을 만든다 | 프로젝트에서 `/vibe-kit:setup` |
+| `improve` | 이미 돌아가는 프로젝트를 살펴보고 나아질 곳을 쉬운 말로 된 목록으로 보여 준 뒤, 고른 것만 하나씩 고치고 확인한다 | 프로젝트에서 `/vibe-kit:improve` |
+| `clarify` | 모호한 요청에서 바라는 것을 알아낸다. 스스로 먼저 알아내고, 필요할 때만 선택지로 묻고, "이렇게 이해했습니다"로 확인한다 | Claude가 필요할 때 스스로 쓴다. `/vibe-kit:clarify`로 불러도 된다 |
 | `retro` | 일하면서 생긴 실수와 교정을 확신 점수와 함께 기록하고, 근거가 쌓이면 지시와 설정을 고친다 | 작업이 끝났을 때 `/vibe-kit:retro` |
 | `freshness` | 만들기 전에 이미 있는 것을 먼저 찾고, 기억이 아니라 현재 문서로 도구와 의존성을 확인하고 기록한다 | 새 기능을 시작할 때, 그리고 주 1회 `/vibe-kit:freshness` |
 | `scout` | 새 플러그인과 도구를 찾아 평가하고 이 저장소에 변경 제안으로 올린다 | 이 저장소에서 주 1회 `/vibe-kit:scout` |
@@ -59,7 +61,7 @@ claude plugin install vibe-kit@vibe-kit
 claude plugin details vibe-kit
 ```
 
-스킬 4개(`setup`, `retro`, `freshness`, `scout`)와 서브에이전트 2개(`researcher`, `reviewer`)가 보이면 된 것이다.
+스킬 6개(`setup`, `improve`, `clarify`, `retro`, `freshness`, `scout`)와 서브에이전트 2개(`researcher`, `reviewer`)가 보이면 된 것이다.
 
 ### 4. 자동 업데이트 켜기
 
@@ -92,7 +94,9 @@ claude plugin marketplace remove vibe-kit
 1. 프로젝트 폴더에서 Claude Code를 연다.
 2. `/vibe-kit:setup`을 실행한다. 프로젝트를 읽고(빈 폴더면 목표를 묻고) 만들 파일과 확인 수단을 보여 준 뒤, 승인하면 만든다.
 3. 새 세션을 연다. 설정과 규칙은 새 세션부터 적용된다.
-4. 일하다가 작업 단위가 끝나면 `/vibe-kit:retro`, 주 1회는 `/vibe-kit:freshness`를 실행한다. 때가 되면 세션 시작 훅이 알려 준다.
+4. 이미 만들어 둔 프로젝트라면 `/vibe-kit:improve`를 실행한다. 프로젝트를 살펴보고 나아질 곳을 목록으로 보여 준다. 번호로 고르면 그것만 고친다.
+5. 바라는 것을 정확한 낱말로 말하지 않아도 된다. "여기 좀 깔끔하게", "뭔가 이상해"처럼 말하면 Claude가 먼저 살펴보고, 필요하면 고를 수 있는 물음으로 되묻는다.
+6. 일하다가 작업 단위가 끝나면 `/vibe-kit:retro`, 주 1회는 `/vibe-kit:freshness`를 실행한다. 때가 되면 세션 시작 훅이 알려 준다.
 
 ## 저장소 구성
 
@@ -100,7 +104,7 @@ claude plugin marketplace remove vibe-kit
 .claude-plugin/marketplace.json   이 저장소를 마켓플레이스로 만드는 목록 파일
 plugins/vibe-kit/                 플러그인 본체
   .claude-plugin/plugin.json        플러그인 이름과 설명
-  skills/                           setup, retro, freshness, scout
+  skills/                           setup, improve, clarify, retro, freshness, scout
   agents/                           researcher, reviewer
   hooks/                            세션 시작 훅
   templates/                        setup이 프로젝트에 만들 파일의 본

@@ -38,6 +38,8 @@ const REQUIRED = [
   'plugins/vibe-kit/skills/retro/SKILL.md',
   'plugins/vibe-kit/skills/freshness/SKILL.md',
   'plugins/vibe-kit/skills/scout/SKILL.md',
+  'plugins/vibe-kit/skills/improve/SKILL.md',
+  'plugins/vibe-kit/skills/clarify/SKILL.md',
   'plugins/vibe-kit/agents/researcher.md',
   'plugins/vibe-kit/agents/reviewer.md',
   'plugins/vibe-kit/hooks/hooks.json',
