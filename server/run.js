@@ -19,6 +19,20 @@ const WORK = path.join(__dirname, '.work');
 const config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json'), 'utf8'));
 const baseSettings = JSON.parse(fs.readFileSync(path.join(__dirname, 'unattended.settings.json'), 'utf8'));
 const DRY = process.argv.includes('--dry-run');
+// 시험할 때만 쓰는 덮어쓰기: VIBE_KIT_TIMEOUT_MINUTES=0.1 처럼 주면 그 값을 시간 상한으로 쓴다.
+const TIMEOUT_MINUTES = Number(process.env.VIBE_KIT_TIMEOUT_MINUTES) > 0 ? Number(process.env.VIBE_KIT_TIMEOUT_MINUTES) : config.timeoutMinutes;
+
+// claude 실행 파일을 찾는다. Windows에서 셸을 거쳐 실행하면 시간 상한을 넘겼을 때 셸만 끝나고
+// claude 프로세스가 남으므로, 실행 파일(.exe)을 찾을 수 있으면 셸 없이 직접 실행한다.
+function claudeCommand() {
+  if (process.platform !== 'win32') return { command: 'claude', shell: false };
+  const found = spawnSync('where', ['claude'], { encoding: 'utf8' });
+  const exe = (found.stdout || '')
+    .split(/\r?\n/)
+    .map((s) => s.trim())
+    .find((s) => s.toLowerCase().endsWith('.exe'));
+  return exe ? { command: exe, shell: false } : { command: 'claude', shell: true };
+}
 
 function today() {
   const d = new Date();
@@ -53,16 +67,22 @@ function runClaude(cwd, prompt, settingsFile) {
     console.log(`[미리 보기] (${rel(ROOT, cwd)}) claude ${args.join(' ')}`);
     return { ok: true, denied: [], deniedCount: 0, summary: '미리 보기', cost: 0 };
   }
-  const r = spawnSync('claude', args, {
+  const exe = claudeCommand();
+  const r = spawnSync(exe.command, args, {
     cwd,
     input: prompt,
     encoding: 'utf8',
-    shell: process.platform === 'win32',
-    timeout: config.timeoutMinutes * 60 * 1000,
+    shell: exe.shell,
+    timeout: TIMEOUT_MINUTES * 60 * 1000,
     maxBuffer: 64 * 1024 * 1024,
   });
   if (r.error) {
-    const why = r.error.code === 'ETIMEDOUT' ? `시간 상한(${config.timeoutMinutes}분) 초과` : r.error.message;
+    // 시간 상한을 넘겼을 때, Windows에서는 셸만 끝나고 그 아래의 claude 프로세스가 남는다.
+    // 남은 프로세스가 계속 일하며 사용량을 쓰지 않도록 프로세스 묶음 전체를 끝낸다.
+    if (r.error.code === 'ETIMEDOUT' && exe.shell && r.pid) {
+      spawnSync('taskkill', ['/F', '/T', '/PID', String(r.pid)], { stdio: 'ignore' });
+    }
+    const why = r.error.code === 'ETIMEDOUT' ? `시간 상한(${TIMEOUT_MINUTES}분) 초과` : r.error.message;
     return { ok: false, denied: [], deniedCount: 0, summary: why, cost: 0 };
   }
   let result = null;
