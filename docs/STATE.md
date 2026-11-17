@@ -28,6 +28,7 @@
 `scout`와 정기 실행의 기록이다. 형식: `- 날짜 | 무엇 | 결과 | 한 일, 만든 변경 제안, 실패 원인`
 
 <!-- 실행 기록: 새 줄을 이 표시 바로 아래에 넣는다 -->
+- 2026-11-17 | scout | 실패 | 시간 상한(0.1분) 초과
 - 2026-11-17 | scout | 실패 | 시간 상한(45분) 초과
 - 2026-11-16 | scout 남은 후보 시험(손으로 실행) | 성공 | 후보 9개를 15번의 대화 없는 실행으로 시험(뒤 묶음은 S: 드라이브에서. 어림 약 2.6달러). 고친 절차대로 비교 전에 스킬이 불렸는지 확인함. 채택 3(디자인): oil-ui(방향 탐색), hue(브랜드에서 디자인 값), motion-advanced(움직임 묶음에 더함). 거절 1: oil-motion. 보류 3: superpowers, modern-web-guidance, playwright. 시험 못 함: context7(인증 필요). chrome-devtools-mcp는 시험을 통과해 채택 제안을 따로 올림. 시험하지 않은 것: ui-ux-pro-max(스크립트 165개), serena, rtk(프로그램 설치 필요), superdesign(외부 계정), stitch-skills, ux-ui-agent-skills, github(토큰 필요). 기본 가지에 바로 올림. 되돌리기: 이 커밋을 git revert
 - 2026-11-16 | scout ECC 나머지 디자인 스킬 시험(손으로 실행) | 성공(한 번 다시 함) | ECC의 화면 관련 스킬 13개의 글을 읽고, 시험할 수 있는 6개를 네 과제(SwiftUI, Compose, React 움직임, React 접근성)로 시험. 첫 실행은 시험 준비 스크립트의 실수로 스킬 폴더가 엉뚱한 곳에 복사돼 스킬 없이 돈 것을 실행 보고에서 발견하고 다시 실행함(대화 없는 실행 14번, 어림 약 2.3달러). 채택 1: motion-foundations + motion-patterns(움직임). 보류 4, 후보 3, 범위 밖 1줄. 기본 가지에 바로 올림. 되돌리기: 이 커밋을 git revert
