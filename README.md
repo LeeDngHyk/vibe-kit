@@ -143,3 +143,7 @@ scripts/validate.js               형식 검증
 ## 서버에서 돌리기
 
 정기 실행(주 1회 `scout`, 프로젝트별 `freshness`)을 서버로 옮기는 방법은 [server/README.md](server/README.md)에 있다.
+
+## 라이선스
+
+MIT. [LICENSE](LICENSE) 파일을 본다. 키트가 채택해 안내하는 바깥 도구들은 각자의 라이선스를 따른다.
